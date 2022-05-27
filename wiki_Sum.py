@@ -6,21 +6,14 @@ import nltk
 import heapq
 
 def wiki_Sum(article_text):
-
-    '''
-    scraped_data = urllib.request.urlopen(website)
-    article = scraped_data.read()
-
-    parsed_article = bs.BeautifulSoup(article,'lxml')
-
-    paragraphs = parsed_article.find_all('p')
-
-    article_text = ""
-
-    for p in paragraphs:
-        article_text += p.text
     
-       '''
+    '''
+    returns str summary: extractive summary built by evaluating word frequencies
+    and sentence scores after applying weights and formatting to get rid of 
+    extraneous grammatical/syntax errors
+    param str article_text: arbitrary passage
+    '''
+    
     try:
         article_text = re.sub(r'\[[0-9]*\]', ' ', article_text)
         article_text = re.sub(r'\s+', ' ', article_text)
