@@ -15,7 +15,7 @@ def beautifulsoup_extract_text_fallback(response_content):
     '''
     This is a fallback function, so that we can always return a value for text content.
     Even for when both Trafilatura and BeautifulSoup are unable to extract the text from a 
-    single URL.
+    single URL. Prevents errors from occuring
     '''
     
     # Create the beautifulsoup object:
@@ -49,6 +49,11 @@ def beautifulsoup_extract_text_fallback(response_content):
     
 
 def extract_text_from_single_web_page(url):
+ 
+    '''
+    webscraping function returns str of visible information on website 
+    param str url: website url
+    '''
     
     downloaded_url = trafilatura.fetch_url(url)
     try:
