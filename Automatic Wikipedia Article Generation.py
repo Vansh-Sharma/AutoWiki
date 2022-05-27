@@ -271,49 +271,57 @@ are no repeats, and then webscraping information for each entity to produce a
 comprehensive article
 '''
 
-query = "Query Language"
-websites = getWebsites(query)
-print(websites)
-data = {}
-sim = dict()
-sim_list = []
-
-
-
-for url in websites:
-    resp = requests.get(url)
+def createArticle(query):
+    output = ""
+    websites = getWebsites(query)
+    print(websites)
+    data = {}
+    sim = dict()
+    sim_list = []
+    for url in websites:
+        resp = requests.get(url)
+        
+        # 2. If the response content is 200 - Status Ok, Save The HTML Content:
+        if resp.status_code == 200:
+            data[url] = resp.text
+        text_content = extract_text_from_single_web_page(url)
+        toRet = wiki_Sum(text_content)
+        standard = getStandard(query)
+        similarity = getEmbeddingScores(toRet, standard)
+        #if (similarity > 0.3 ):
+        #print(similarity)
+        sim[similarity] = toRet
+        sim_list.append(similarity)
+        #mostCommonEnt = getMostCommonEntity(getEntities(toRet))
+        #print(mostCommonEnt)
+        #print(toRet)
+        #print('\n')
+        
+    sim_list.sort(reverse=True)
     
-    # 2. If the response content is 200 - Status Ok, Save The HTML Content:
-    if resp.status_code == 200:
-        data[url] = resp.text
-    text_content = extract_text_from_single_web_page(url)
-    toRet = wiki_Sum(text_content)
-    standard = getStandard(query)
-    similarity = getEmbeddingScores(toRet, standard)
-    #if (similarity > 0.3 ):
-    #print(similarity)
-    sim[similarity] = toRet
-    sim_list.append(similarity)
-    mostCommonEnt = getMostCommonEntity(getEntities(toRet))
-    #print(mostCommonEnt)
-    #print(toRet)
+    sim_list = sim_list[:3]
+    
+    print(sim_list)
+    output += '\n'
+    
     #print('\n')
+    #print(getStandard(query))
+    #print(getEntities(getStandard(query)))
     
-sim_list.sort(reverse=True)
+    for entry in sim_list:
+        output += '\n'
+        #print('\n')
+        text = sim[entry]
+        title = getMostCommonEntity(getEntities(text))
+        output += title[0]
+        output += '\n'
+        output += text
+        output += '\n'
+        #print(title[0])
+        #print('\n')
+        #print(text)
+        #print('\n')
+    return output
 
-sim_list = sim_list[:3]
-
-print(sim_list)
-print('\n')
-#print(getStandard(query))
-#print(getEntities(getStandard(query)))
-
-for entry in sim_list:
-    print('\n')
-    text = sim[entry]
-    title = getMostCommonEntity(getEntities(text))
-    print(title[0])
-    print('\n')
-    print(text)
-    print('\n')
-    
+query = "Query Language"
+print(createArticle(query))
