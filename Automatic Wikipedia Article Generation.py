@@ -266,12 +266,15 @@ consider combining passages with the same or similar entity headers and apply
 abtractive summarization to avoid redundancy. Many abstractive models are capable of 
 doing this. 
 
-Consider expanding on this porject by first extracting relvant entities, making sure there
+Consider expanding on this project by first extracting relvant entities, making sure there
 are no repeats, and then webscraping information for each entity to produce a 
 comprehensive article
 '''
 
 def createArticle(query):
+    '''
+    returns string output: generated Wikipedia article
+    '''
     output = ""
     websites = getWebsites(query)
     print(websites)
